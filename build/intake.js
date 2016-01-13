@@ -1,0 +1,5 @@
+/// <reference path="./all.d.ts" />
+var core_1 = require('./core');
+exports.MyLibrary = core_1.MyLibrary;
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImludGFrZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxtQ0FBbUM7QUFFbkMscUJBQXdCLFFBQVEsQ0FBQztBQUF6QixxQ0FBeUIiLCJmaWxlIjoiaW50YWtlLmpzIiwic291cmNlc0NvbnRlbnQiOlsiLy8vIDxyZWZlcmVuY2UgcGF0aD1cIi4vYWxsLmQudHNcIiAvPlxuXG5leHBvcnQge015TGlicmFyeX0gZnJvbSAnLi9jb3JlJzsiXSwic291cmNlUm9vdCI6Ii9zb3VyY2UvIn0=
