@@ -14,19 +14,20 @@ var gulp        = require('gulp'),
     tsd         = require('gulp-tsd'),
     nodemon     = require('gulp-nodemon'),
     shell       = require('gulp-shell'),
+    jasmine     = require('gulp-jasmine'),
     istanbul    = require('gulp-istanbul');
 
 require('git-guppy')(gulp);
-    
+
 var PATHS = {
   src: 'lib',
   build: 'build',
   test: 'test',
   typings: 'typings'
 };
- 
+
 var tsProject = ts.createProject('tsconfig.json', { sortOutput: true });
- 
+
 /**
   * Git Hooks
   */
@@ -36,14 +37,14 @@ gulp.task('add', ['default'], function(){
   return gulp.src('.')
     .pipe(git.add({options: '-A'}));
 });
- 
+
 /**
  * Defintions files
  */
 gulp.task('definitions', shell.task([
   'node scripts/dts-bundle.js'
 ]));
- 
+
 /**
  * Dev tasks
  */
@@ -70,7 +71,7 @@ gulp.task('scripts:dev', function() {
     ], { base: "./" })
       .pipe(sourcemaps.init())
       .pipe(ts(tsProject));
-   
+
   return merge([
     tsResult.js
       .pipe(sourcemaps.write())
@@ -104,9 +105,7 @@ gulp.task('test', ['scripts:dev'], function (cb) {
     .pipe(istanbul.hookRequire())
     .on('finish', function () {
       gulp.src(PATHS.test + '/**/*.js')
-        .pipe(mocha({
-          reporter: 'spec'
-        }))
+        .pipe(jasmine())
         .pipe(istanbul.writeReports()) // Creating the reports after tests ran
         .on('end', cb);
     });
@@ -128,14 +127,14 @@ gulp.task('scripts:prod', function() {
     ])
       .pipe(sourcemaps.init())
       .pipe(ts(tsProject));
-   
+
   return merge([
     tsResult.dts.pipe(gulp.dest(PATHS.build)),
     tsResult.js
       .pipe(sourcemaps.write())
       .pipe(gulp.dest(PATHS.build))
   ]);
-}); 
+});
 
 gulp.task('clean:prod', function (cb) {
   del([

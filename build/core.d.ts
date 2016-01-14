@@ -1,10 +1,4 @@
 /// <reference path="../lib/all.d.ts" />
-export interface IMyLibraryConfiguration {
-    name: string;
-}
-export declare class MyLibrary {
-    private config;
+export declare class Intake {
     private computedName;
-    constructor(config?: IMyLibraryConfiguration);
-    name: string;
 }

@@ -1,3 +1,3 @@
 /// <reference path="./all.d.ts" />
 
-export {MyLibrary} from './core';
+export {Intake} from './core';
