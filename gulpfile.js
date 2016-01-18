@@ -15,7 +15,10 @@ var gulp        = require('gulp'),
     nodemon     = require('gulp-nodemon'),
     shell       = require('gulp-shell'),
     jasmine     = require('gulp-jasmine'),
-    istanbul    = require('gulp-istanbul');
+    istanbul    = require('gulp-istanbul'),
+    concat    = require('gulp-concat'),
+    uglify    = require('gulp-uglify'),
+    rjs = require("gulp-requirejs");
 
 require('git-guppy')(gulp);
 
@@ -27,6 +30,7 @@ var PATHS = {
 };
 
 var tsProject = ts.createProject('tsconfig.json', { sortOutput: true });
+var tsProjectAmd = ts.createProject('tsconfig_amd.json', { sortOutput: true });
 
 /**
   * Git Hooks
@@ -78,6 +82,31 @@ gulp.task('scripts:dev', function() {
       .pipe(gulp.dest('.'))
   ]);
 });
+
+gulp.task('scripts:rjs', ['scripts:amd'], function () {
+  return merge [
+    rjs({baseUrl: PATHS.build, name:'intake', out: 'intake.amd.js'})
+      .pipe(gulp.dest(PATHS.build))
+    ];
+});
+
+gulp.task('scripts:amd', function() {
+  var tsResult = gulp.src([
+      PATHS.src + '/**/*.ts'
+    ])
+    .pipe(ts(tsProjectAmd));
+
+  return merge([
+      tsResult.js
+        //.pipe(concat("intake.amd.min.js"))
+        //.pipe(uglify())
+        //.pipe(rjs({baseUrl: PATHS.build + '/intake.js'}))
+        .pipe(gulp.dest(PATHS.build))
+      //.pipe(rjs({baseUrl: PATHS.build + '/intake.js'}))
+    ]);
+
+});
+
 gulp.task('scripts:dev:watch', ['scripts:dev'], function () {
   gulp.watch([
     PATHS.src + '/**/*.ts',
@@ -153,6 +182,7 @@ gulp.task('clean', ['clean:dev', 'clean:prod', 'clean:tsd']);
 gulp.task('default', function (cb) {
   runSequence(
     'ci',
+    'scripts:rjs',
     'scripts:prod',
     'definitions',
     cb

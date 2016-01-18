@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES3",
-    "module": "commonjs",
+    "module": "amd",
     "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
