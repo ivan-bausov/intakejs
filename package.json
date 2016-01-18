@@ -1,5 +1,5 @@
 {
-  "name": "intake",
+  "name": "intake.js",
   "version": "0.0.0",
   "description": "A library written in Typescript.",
   "typescript": {

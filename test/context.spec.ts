@@ -39,5 +39,9 @@ describe('Context', ()=>{
     context.register(ID, INSTANCE);
     context.clear();
     expect(()=>{context.resolve(ID)}).toThrow();
-  })
+  });
+  it('throws error, if registered twice', ()=>{
+    context.register(ID, INSTANCE);
+    expect(()=>{context.register(ID, INSTANCE)}).toThrow();
+  });
 });

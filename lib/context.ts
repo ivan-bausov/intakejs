@@ -12,6 +12,9 @@ export default class Context {
    * @param force
      */
   register<T>(runtime_id: string, instance: T | InstanceCreator<T>, force: boolean = false) {
+    if (this.map[runtime_id] && !force) {
+      throw new Error(`Instance with id "${runtime_id}" is already registered`);
+    }
     this.map[runtime_id] = {
       instance: isCreator(instance) ? null : instance,
       creator: isCreator(instance) ? instance : null
