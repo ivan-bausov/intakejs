@@ -1,3 +1,4 @@
+import { IContext } from "./context";
 export interface IServiceConstructor {
     new (): any;
     service_name: string;
@@ -18,5 +19,6 @@ export default class Injector {
      * @constructor
        */
     Inject: (runtime_id: string) => ((target, key) => void);
+    getContext(): IContext;
     private context;
 }

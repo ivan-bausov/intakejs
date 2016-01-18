@@ -2,7 +2,13 @@ export interface InstanceCreator<T> {
   (): T;
 }
 
-export default class Context {
+export interface IContext {
+  register<T>(runtime_id: string, instance: T | InstanceCreator<T>, force?: boolean);
+  resolve<T>(runtime_id: string): T;
+  clear();
+}
+
+export default class Context implements IContext {
   /**
    * Saves instance with given id in context. If second argument is InstanceCreator, actual instance would be
    * instantiated on first resolve.
