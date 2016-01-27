@@ -1,7 +1,7 @@
 {
-  "name": "intake.js",
+  "name": "intakejs",
   "version": "0.0.0",
-  "description": "A library written in Typescript.",
+  "description": "Simple DI container based on ES7 decorators",
   "typescript": {
     "definition": "build/intake.d.ts"
   },
@@ -16,18 +16,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/koroandr/intake.git"
+    "url": "git+https://github.com/iviru/intakejs.git"
   },
   "keywords": [
     "typescript",
+    "di",
+    "ioc",
+    "dependency injection",
     "library"
   ],
-  "author": "koroandr",
+  "author": "Andrew Korolev <akorolev@ivi.ru>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/koroandr/intake/issues"
+    "url": "https://github.com/iviru/intakejs/issues"
   },
-  "homepage": "https://github.com/koroandr/intake#readme",
+  "homepage": "https://github.com/iviru/intakejs",
   "devDependencies": {
     "chai": "^3.2.0",
     "codeclimate-test-reporter": "^0.1.0",
