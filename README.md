@@ -24,7 +24,7 @@ let intake = require('intake');
 AMD version for client-side usage is also available:
 
 ```
-require(['node_modules/intakejs/build/intak'], function(intake) {
+require(['node_modules/intakejs/build/intake.amd'], function(intake) {
 	...
 });
 ```
@@ -65,7 +65,7 @@ class Producer {
 ```
 class Consumer {
     @Inject('producer')     //injects service with name 'producer'
-    private foo: Producer; //you can use this field after class is constructed
+    private foo: Producer;  //you can use this field after class is constructed
 
     public bar(): string {
         return this.foo.foo() + 'bar';
