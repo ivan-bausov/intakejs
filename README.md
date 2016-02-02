@@ -65,7 +65,7 @@ class Producer {
 ```
 class Consumer {
     @Inject('producer')     //injects service with name 'producer'
-    private foo: Productor; //you can use this field after class is constructed
+    private foo: Producer; //you can use this field after class is constructed
 
     public bar(): string {
         return this.foo.foo() + 'bar';
