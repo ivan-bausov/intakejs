@@ -9,3 +9,4 @@ lib/**/*.js
 test/**/*.js
 examples/**/*.js
 coverage
+npm-debug.log
