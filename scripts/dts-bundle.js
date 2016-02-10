@@ -1,6 +1,6 @@
 var dts = require('dts-bundle');
 
 dts.bundle({
-    name: 'intake',
+    name: 'intakejs',
     main: 'build/intake.d.ts'
 });
