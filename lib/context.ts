@@ -5,6 +5,7 @@ export interface InstanceCreator<T> {
 export interface IContext {
   register<T>(runtime_id: string, instance: T | InstanceCreator<T>, force?: boolean);
   resolve<T>(runtime_id: string): T;
+  clone(): IContext;
   clear();
 }
 
@@ -56,7 +57,11 @@ export default class Context implements IContext {
      */
   clone(): IContext {
     var ctx = new Context();
-    ctx.map = this.map;
+    for (let name in this.map) {
+      if (this.map.hasOwnProperty(name)) {
+        ctx.map[name] = this.map[name];
+      }
+    }
     return ctx;
   }
 

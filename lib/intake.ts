@@ -1,12 +1,13 @@
 /// <reference path="./all.d.ts" />
 import {IServiceConstructor, default as Injector}  from "./injector";
 
-const injector = new Injector();
+var _injector = new Injector();
 
 export {IServiceConstructor} from "./injector";
 import {IContext} from "./context";
 export {IContext} from "./context";
 
-export const Service = injector.Service;
-export const Inject = injector.Inject;
-export const context: IContext = injector.getContext();
+export const Service = _injector.Service;
+export const Inject = _injector.Inject;
+export const injector = _injector;
+export const context: IContext = _injector.getContext();

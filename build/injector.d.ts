@@ -20,5 +20,8 @@ export default class Injector {
        */
     Inject: (runtime_id: string) => ((target, key) => void);
     getContext(): IContext;
+    createTestContext(): void;
+    clearTestContext(): void;
     private context;
+    private old_context;
 }

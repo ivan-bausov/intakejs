@@ -49,7 +49,11 @@ define('context',["require", "exports"], function (require, exports) {
            */
         Context.prototype.clone = function () {
             var ctx = new Context();
-            ctx.map = this.map;
+            for (var name_1 in this.map) {
+                if (this.map.hasOwnProperty(name_1)) {
+                    ctx.map[name_1] = this.map[name_1];
+                }
+            }
             return ctx;
         };
         return Context;
@@ -67,14 +71,14 @@ define('injector',["require", "exports", "./context"], function (require, export
             var _this = this;
             this.context = new context_1["default"]();
             this.Service = (function (target) {
-                _this.context.register(target.service_name, function () { return new target(); });
+                _this.getContext().register(target.service_name, function () { return new target(); });
                 return target;
             }).bind(this);
             this.Inject = (function (runtime_id) {
                 return function (target, key) {
                     Object.defineProperty(target, key, {
                         get: function () {
-                            return _this.context.resolve(runtime_id);
+                            return _this.getContext().resolve(runtime_id);
                         },
                         set: function () {
                             throw new Error("Cannot set injected field \"" + key + "\"");
@@ -86,6 +90,13 @@ define('injector',["require", "exports", "./context"], function (require, export
         Injector.prototype.getContext = function () {
             return this.context;
         };
+        Injector.prototype.createTestContext = function () {
+            this.old_context = this.context;
+            this.context = this.context.clone();
+        };
+        Injector.prototype.clearTestContext = function () {
+            this.context = this.old_context;
+        };
         return Injector;
     })();
     exports.__esModule = true;
@@ -96,8 +107,9 @@ define('injector',["require", "exports", "./context"], function (require, export
 });
 
 define('intake',["require", "exports", "./injector"], function (require, exports, injector_1) {
-    var injector = new injector_1["default"]();
-    exports.Service = injector.Service;
-    exports.Inject = injector.Inject;
-    exports.context = injector.getContext();
+    var _injector = new injector_1["default"]();
+    exports.Service = _injector.Service;
+    exports.Inject = _injector.Inject;
+    exports.injector = _injector;
+    exports.context = _injector.getContext();
 });

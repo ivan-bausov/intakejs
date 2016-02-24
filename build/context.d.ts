@@ -4,6 +4,7 @@ export interface InstanceCreator<T> {
 export interface IContext {
     register<T>(runtime_id: string, instance: T | InstanceCreator<T>, force?: boolean): any;
     resolve<T>(runtime_id: string): T;
+    clone(): IContext;
     clear(): any;
 }
 export default class Context implements IContext {

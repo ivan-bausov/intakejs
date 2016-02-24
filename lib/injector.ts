@@ -9,7 +9,7 @@ export interface IServiceConstructor {
 export default class Injector {
   constructor() {
     this.Service = ((target: IServiceConstructor) => {
-      this.context.register(target.service_name, ()=>new target());
+      this.getContext().register(target.service_name, ()=>new target());
 
       return target;
     }).bind(this);
@@ -18,7 +18,7 @@ export default class Injector {
       return (target: any, key: string) => {
         Object.defineProperty(target, key, {
           get: () => {
-            return this.context.resolve(runtime_id);
+            return this.getContext().resolve(runtime_id);
           },
           set: () => {
             throw new Error(`Cannot set injected field "${key}"`)
@@ -48,7 +48,18 @@ export default class Injector {
     return this.context;
   }
 
-  private context: Context = new Context();
+  public createTestContext() {
+    this.old_context = this.context;
+    this.context = this.context.clone();
+  }
+
+  public clearTestContext() {
+    this.context = this.old_context;
+  }
+
+  private context: IContext = new Context();
+
+  private old_context: IContext;
 }
 
 
