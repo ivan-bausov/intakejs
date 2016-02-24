@@ -64,6 +64,11 @@ declare module '__intakejs/context' {
                 * Removes all previously registered instances from context
                 */
             clear(): void;
+            /**
+                * Copies all state of current context to newly created one
+                * @returns {IContext}
+                    */
+            clone(): IContext;
     }
 }
 

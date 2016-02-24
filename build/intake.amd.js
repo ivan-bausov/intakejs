@@ -43,6 +43,15 @@ define('context',["require", "exports"], function (require, exports) {
         Context.prototype.clear = function () {
             this.map = {};
         };
+        /**
+         * Copies all state of current context to newly created one
+         * @returns {IContext}
+           */
+        Context.prototype.clone = function () {
+            var ctx = new Context();
+            ctx.map = this.map;
+            return ctx;
+        };
         return Context;
     })();
     exports.__esModule = true;

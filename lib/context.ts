@@ -50,6 +50,16 @@ export default class Context implements IContext {
     this.map = {};
   }
 
+  /**
+   * Copies all state of current context to newly created one
+   * @returns {IContext}
+     */
+  clone(): IContext {
+    var ctx = new Context();
+    ctx.map = this.map;
+    return ctx;
+  }
+
   private map : {
     [key: string]: RuntimeData<any>;
   } = {};

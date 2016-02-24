@@ -25,5 +25,10 @@ export default class Context implements IContext {
      * Removes all previously registered instances from context
      */
     clear(): void;
+    /**
+     * Copies all state of current context to newly created one
+     * @returns {IContext}
+       */
+    clone(): IContext;
     private map;
 }

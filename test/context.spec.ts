@@ -44,4 +44,9 @@ describe('Context', ()=>{
     context.register(ID, INSTANCE);
     expect(()=>{context.register(ID, INSTANCE)}).toThrow();
   });
+  it('clone', ()=>{
+    context.register(ID, INSTANCE);
+    var new_one = context.clone();
+    expect(new_one.resolve(ID)).toBe(INSTANCE);
+  });
 });
