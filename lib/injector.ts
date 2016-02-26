@@ -33,7 +33,7 @@ export default class Injector {
    * @param target
    * @constructor
      */
-  public Service: (target: IServiceConstructor) => IServiceConstructor;
+  public Service: (target: IServiceConstructor) => any;
 
   /**
    * injects dependency with given runtime id to the decorated field on first get

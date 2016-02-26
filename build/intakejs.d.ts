@@ -5,7 +5,7 @@ declare module 'intakejs' {
     export { IServiceConstructor } from "__intakejs/injector";
     import { IContext } from "__intakejs/context";
     export { IContext } from "__intakejs/context";
-    export const Service: (target: IServiceConstructor) => IServiceConstructor;
+    export const Service: (target: IServiceConstructor) => any;
     export const Inject: (runtime_id: string) => (target: any, key: any) => void;
     export const injector: Injector;
     export const context: IContext;
@@ -24,7 +24,7 @@ declare module '__intakejs/injector' {
                 * @param target
                 * @constructor
                     */
-            Service: (target: IServiceConstructor) => IServiceConstructor;
+            Service: (target: IServiceConstructor) => any;
             /**
                 * injects dependency with given runtime id to the decorated field on first get
                 *
