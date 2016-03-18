@@ -1,6 +1,6 @@
 {
   "name": "intakejs",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Simple DI container based on ES7 decorators",
   "typescript": {
     "definition": "build/intake.d.ts"
