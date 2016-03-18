@@ -8,13 +8,13 @@ export interface IServiceConstructor {
 
 export default class Injector {
   constructor() {
-    this.Service = ((target: IServiceConstructor) => {
+    this.Service = function (target: IServiceConstructor) {
       this.getContext().register(target.service_name, ()=>new target());
 
       return target;
-    }).bind(this);
+    };
 
-    this.Inject = ((runtime_id: string) => {
+    this.Inject = function(runtime_id: string) {
       return (target: any, key: string) => {
         Object.defineProperty(target, key, {
           get: () => {
@@ -25,7 +25,7 @@ export default class Injector {
           }
         });
       }
-    }).bind(this);
+    };
 
   }
   /**
