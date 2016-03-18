@@ -6,15 +6,43 @@ export interface IServiceConstructor {
   service_name: string;
 }
 
+if (!Function.prototype.bind) {
+  Function.prototype.bind = function(oThis) {
+    if (typeof this !== 'function') {
+      // closest thing possible to the ECMAScript 5
+      // internal IsCallable function
+      throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
+    }
+
+    var aArgs   = Array.prototype.slice.call(arguments, 1),
+      fToBind = this,
+      fNOP    = function() {},
+      fBound  = function() {
+        return fToBind.apply(this instanceof fNOP
+            ? this
+            : oThis,
+          aArgs.concat(Array.prototype.slice.call(arguments)));
+      };
+
+    if (this.prototype) {
+      // Function.prototype doesn't have a prototype property
+      fNOP.prototype = this.prototype;
+    }
+    fBound.prototype = new fNOP();
+
+    return fBound;
+  };
+}
+
 export default class Injector {
   constructor() {
-    this.Service = function (target: IServiceConstructor) {
+    this.Service = ((target: IServiceConstructor) => {
       this.getContext().register(target.service_name, ()=>new target());
 
       return target;
-    };
+    }).bind(this);
 
-    this.Inject = function(runtime_id: string) {
+    this.Inject = ((runtime_id: string) => {
       return (target: any, key: string) => {
         Object.defineProperty(target, key, {
           get: () => {
@@ -25,7 +53,7 @@ export default class Injector {
           }
         });
       }
-    };
+    }).bind(this);
 
   }
   /**
