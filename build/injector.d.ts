@@ -13,6 +13,11 @@ export default class Injector {
      * @constructor
        */
     Service: (target: IServiceConstructor) => any;
+    /**
+     * registers instance of a class with given runtime id
+     * @param runtime_id
+     * @returns {function(any)}
+     */
     Injectable: (runtime_id: string) => (target: IConstructor) => any;
     /**
      * injects dependency with given runtime id to the decorated field on first get
