@@ -52,6 +52,25 @@ describe('Injector', ()=>{
     expect(consumer.getFoo()).toBe('foo');
   });
 
+  it('@Injectable decorator works', ()=>{
+    @injector.Injectable('injectable_productor')
+    class Productor {
+      method() {
+        return 'foo';
+      }
+    }
+
+    class Consumer {
+      public getFoo() {
+        return this.foo.method();
+      }
+      @injector.Inject('injectable_productor')
+      private foo: Productor;
+    }
+
+    expect(new Consumer().getFoo()).toBe('foo');
+  });
+
   it('creates and clears separate test context', ()=>{
     class Consumer {
       public getFoo() {

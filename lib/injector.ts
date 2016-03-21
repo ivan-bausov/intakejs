@@ -1,9 +1,12 @@
 import Context from "./context";
 import {IContext} from "./context";
 
-export interface IServiceConstructor {
-  new(): any;
+export interface IServiceConstructor extends IConstructor{
   service_name: string;
+}
+
+export interface IConstructor {
+  new(): any;
 }
 
 export default class Injector {
@@ -14,6 +17,12 @@ export default class Injector {
       self.getContext().register(target.service_name, ()=>new target());
 
       return target;
+    };
+
+    this.Injectable = (runtime_id: string) => {
+      return (target: IConstructor) => {
+        self.getContext().register(runtime_id, ()=>new target());
+      }
     };
 
     this.Inject = (runtime_id: string) => {
@@ -36,6 +45,8 @@ export default class Injector {
    * @constructor
      */
   public Service: (target: IServiceConstructor) => any;
+
+  public Injectable: (runtime_id: string) => (target: IConstructor)=>any;
 
   /**
    * injects dependency with given runtime id to the decorated field on first get

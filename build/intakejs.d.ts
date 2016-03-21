@@ -13,9 +13,11 @@ declare module 'intakejs' {
 
 declare module '__intakejs/injector' {
     import { IContext } from "__intakejs/context";
-    export interface IServiceConstructor {
-            new (): any;
+    export interface IServiceConstructor extends IConstructor {
             service_name: string;
+    }
+    export interface IConstructor {
+            new (): any;
     }
     export default class Injector {
             constructor();
@@ -25,6 +27,7 @@ declare module '__intakejs/injector' {
                 * @constructor
                     */
             Service: (target: IServiceConstructor) => any;
+            Injectable: (runtime_id: string) => (target: IConstructor) => any;
             /**
                 * injects dependency with given runtime id to the decorated field on first get
                 *

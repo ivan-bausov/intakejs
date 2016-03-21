@@ -74,6 +74,11 @@ define('injector',["require", "exports", "./context"], function (require, export
                 self.getContext().register(target.service_name, function () { return new target(); });
                 return target;
             };
+            this.Injectable = function (runtime_id) {
+                return function (target) {
+                    self.getContext().register(runtime_id, function () { return new target(); });
+                };
+            };
             this.Inject = function (runtime_id) {
                 return function (target, key) {
                     Object.defineProperty(target, key, {
