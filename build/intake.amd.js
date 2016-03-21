@@ -66,46 +66,26 @@ define('context',["require", "exports"], function (require, exports) {
 });
 
 define('injector',["require", "exports", "./context"], function (require, exports, context_1) {
-    if (!Function.prototype.bind) {
-        Function.prototype.bind = function (oThis) {
-            if (typeof this !== 'function') {
-                // closest thing possible to the ECMAScript 5
-                // internal IsCallable function
-                throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
-            }
-            var aArgs = Array.prototype.slice.call(arguments, 1), fToBind = this, fNOP = function () { }, fBound = function () {
-                return fToBind.apply(this instanceof fNOP
-                    ? this
-                    : oThis, aArgs.concat(Array.prototype.slice.call(arguments)));
-            };
-            if (this.prototype) {
-                // Function.prototype doesn't have a prototype property
-                fNOP.prototype = this.prototype;
-            }
-            fBound.prototype = new fNOP();
-            return fBound;
-        };
-    }
     var Injector = (function () {
         function Injector() {
-            var _this = this;
             this.context = new context_1["default"]();
-            this.Service = (function (target) {
-                _this.getContext().register(target.service_name, function () { return new target(); });
+            var self = this;
+            this.Service = function (target) {
+                self.getContext().register(target.service_name, function () { return new target(); });
                 return target;
-            }).bind(this);
-            this.Inject = (function (runtime_id) {
+            };
+            this.Inject = function (runtime_id) {
                 return function (target, key) {
                     Object.defineProperty(target, key, {
                         get: function () {
-                            return _this.getContext().resolve(runtime_id);
+                            return self.getContext().resolve(runtime_id);
                         },
                         set: function () {
                             throw new Error("Cannot set injected field \"" + key + "\"");
                         }
                     });
                 };
-            }).bind(this);
+            };
         }
         Injector.prototype.getContext = function () {
             return this.context;
