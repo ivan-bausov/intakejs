@@ -38,6 +38,44 @@ export default class Injector {
       }
     };
 
+    this.ConstructorInject = (...runtime_ids: string[]) => {
+      return (target: Function)=>{
+        // save a reference to the original constructor
+        var original = target;
+
+        // a utility function to generate instances of a class
+        function construct(constructor, args) {
+          var c : any = function () {
+            return constructor.apply(this, args);
+          };
+          c.prototype = constructor.prototype;
+          return new c();
+        }
+
+        // the new constructor behaviour
+        var f : any = function (...args) {
+
+          let injected_deps = [];
+          let i = 0;
+          for (let id of runtime_ids) {
+            if (typeof args[i] === 'undefined') {
+              injected_deps.push(self.getContext().resolve(id));
+            } else {
+              injected_deps.push(args[i]);
+            }
+            i++;
+          }
+          return construct(original, injected_deps);
+        };
+
+        // copy prototype so intanceof operator still works
+        f.prototype = original.prototype;
+
+        // return new constructor (will override original)
+        return f;
+      }
+    }
+
   }
   /**
    * registers a service
@@ -56,11 +94,16 @@ export default class Injector {
   /**
    * injects dependency with given runtime id to the decorated field on first get
    *
-   * @param runtime_id
+   * @param runtime_id - runtime id or array of runtime ids
    * @returns {function(any, string)}
    * @constructor
      */
   public Inject: (runtime_id: string)=>((target, key)=>void);
+
+  /**
+   * injects dependency with given runtime ids to the decorated class'es constructor
+   */
+  public ConstructorInject: (...runtime_id: string[])=>(target)=>any;
 
   public getContext(): IContext {
     return this.context;

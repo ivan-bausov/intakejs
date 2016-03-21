@@ -91,6 +91,48 @@ define('injector',["require", "exports", "./context"], function (require, export
                     });
                 };
             };
+            this.ConstructorInject = function () {
+                var runtime_ids = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    runtime_ids[_i - 0] = arguments[_i];
+                }
+                return function (target) {
+                    // save a reference to the original constructor
+                    var original = target;
+                    // a utility function to generate instances of a class
+                    function construct(constructor, args) {
+                        var c = function () {
+                            return constructor.apply(this, args);
+                        };
+                        c.prototype = constructor.prototype;
+                        return new c();
+                    }
+                    // the new constructor behaviour
+                    var f = function () {
+                        var args = [];
+                        for (var _i = 0; _i < arguments.length; _i++) {
+                            args[_i - 0] = arguments[_i];
+                        }
+                        var injected_deps = [];
+                        var i = 0;
+                        for (var _a = 0; _a < runtime_ids.length; _a++) {
+                            var id = runtime_ids[_a];
+                            if (typeof args[i] === 'undefined') {
+                                injected_deps.push(self.getContext().resolve(id));
+                            }
+                            else {
+                                injected_deps.push(args[i]);
+                            }
+                            i++;
+                        }
+                        return construct(original, injected_deps);
+                    };
+                    // copy prototype so intanceof operator still works
+                    f.prototype = original.prototype;
+                    // return new constructor (will override original)
+                    return f;
+                };
+            };
         }
         Injector.prototype.getContext = function () {
             return this.context;

@@ -71,6 +71,56 @@ describe('Injector', ()=>{
     expect(new Consumer().getFoo()).toBe('foo');
   });
 
+
+  describe('@ConstructorInject', ()=>{
+    let Productor1, Productor2, Consumer;
+
+    beforeEach(()=>{
+      @injector.Injectable('Productor1')
+      class _Productor1 {
+        method() {
+          return 'foo';
+        }
+      }
+
+      @injector.Injectable('Productor2')
+      class _Productor2 {
+        method() {
+          return 'bar';
+        }
+      }
+
+      @injector.ConstructorInject("Productor1", "Productor2")
+      class _Consumer {
+        constructor(private foo?: _Productor1, private bar?: _Productor2) {
+
+        }
+        public getFooBar() {
+          return this.foo.method() + this.bar.method();
+        }
+      }
+
+      Productor1 = _Productor1;
+      Productor2 = _Productor2;
+      Consumer = _Consumer;
+    });
+
+
+
+
+    it('injects deps in constructor', ()=>{
+      expect(new Consumer().getFooBar()).toBe('foobar');
+    });
+
+    it('do not injects specified deps', ()=>{
+      expect(new Consumer({
+        method: ()=>'zap'
+      }).getFooBar()).toBe('zapbar');
+    });
+  });
+
+
+
   it('creates and clears separate test context', ()=>{
     class Consumer {
       public getFoo() {

@@ -22,11 +22,15 @@ export default class Injector {
     /**
      * injects dependency with given runtime id to the decorated field on first get
      *
-     * @param runtime_id
+     * @param runtime_id - runtime id or array of runtime ids
      * @returns {function(any, string)}
      * @constructor
        */
     Inject: (runtime_id: string) => ((target, key) => void);
+    /**
+     * injects dependency with given runtime ids to the decorated class'es constructor
+     */
+    ConstructorInject: (...runtime_id: string[]) => (target) => any;
     getContext(): IContext;
     createTestContext(): void;
     clearTestContext(): void;
