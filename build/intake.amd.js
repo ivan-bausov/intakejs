@@ -156,7 +156,9 @@ define('injector',["require", "exports", "./context"], function (require, export
 define('intake',["require", "exports", "./injector"], function (require, exports, injector_1) {
     var _injector = new injector_1["default"]();
     exports.Service = _injector.Service;
+    exports.Injectable = _injector.Injectable;
     exports.Inject = _injector.Inject;
+    exports.ConstructorInject = _injector.ConstructorInject;
     exports.injector = _injector;
     exports.context = _injector.getContext();
 });
