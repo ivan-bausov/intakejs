@@ -32,8 +32,11 @@ export default class Injector {
      */
     ConstructorInject: (...runtime_id: string[]) => (target) => any;
     getContext(): IContext;
+    mock(runtime_id: string, mock: any): void;
+    clearMocks(): void;
     createTestContext(): void;
     clearTestContext(): void;
+    private is_test_context;
     private context;
     private old_context;
 }

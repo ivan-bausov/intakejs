@@ -49,6 +49,8 @@ declare module '__intakejs/injector' {
                 */
             ConstructorInject: (...runtime_id: string[]) => (target) => any;
             getContext(): IContext;
+            mock(runtime_id: string, mock: any): void;
+            clearMocks(): void;
             createTestContext(): void;
             clearTestContext(): void;
     }

@@ -151,4 +151,53 @@ describe('Injector', ()=>{
     expect(consumer.getFoo()).toBe('foo');
   });
 
+  it('mock() and clearMock()', ()=>{
+    class Consumer {
+      public getFoo() {
+        return this.foo && this.foo.method();
+      }
+
+      public getBar() {
+        return this.bar && this.bar.method();
+      }
+
+      @injector.Inject('productor')
+      private foo: Productor;
+
+      @injector.Inject('productor2')
+      private bar: Productor2;
+    }
+
+    var consumer = new Consumer()
+
+    @injector.Service
+    class Productor {
+      static service_name = 'productor';
+      method() {
+        return 'foo';
+      }
+    }
+
+    @injector.Service
+    class Productor2 {
+      static service_name = 'productor2';
+      method() {
+        return 'bar';
+      }
+    }
+
+    injector.createTestContext();
+
+    injector.mock('productor', { method: ()=>'test_foo'});
+    injector.mock('productor2', { method: ()=>'test_bar'})
+
+    expect(consumer.getFoo()).toBe('test_foo');
+    expect(consumer.getBar()).toBe('test_bar');
+
+    injector.clearMocks();
+
+    expect(consumer.getFoo()).toBe('foo');
+    expect(consumer.getBar()).toBe('bar');
+  });
+
 });

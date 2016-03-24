@@ -109,14 +109,31 @@ export default class Injector {
     return this.context;
   }
 
+  public mock(runtime_id: string, mock: any) {
+    this.createTestContext();
+    this.getContext().register(runtime_id, mock, true);
+  }
+
+  public clearMocks() {
+    this.clearTestContext();
+  }
+
   public createTestContext() {
+    if (this.is_test_context) {
+      return;
+    }
     this.old_context = this.context;
     this.context = this.context.clone();
+    this.is_test_context = true;
   }
 
   public clearTestContext() {
     this.context = this.old_context;
+    this.old_context = null;
+    this.is_test_context = false;
   }
+
+  private is_test_context: boolean = false;
 
   private context: IContext = new Context();
 

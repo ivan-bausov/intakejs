@@ -68,6 +68,7 @@ define('context',["require", "exports"], function (require, exports) {
 define('injector',["require", "exports", "./context"], function (require, exports, context_1) {
     var Injector = (function () {
         function Injector() {
+            this.is_test_context = false;
             this.context = new context_1["default"]();
             var self = this;
             this.Service = function (target) {
@@ -137,12 +138,25 @@ define('injector',["require", "exports", "./context"], function (require, export
         Injector.prototype.getContext = function () {
             return this.context;
         };
+        Injector.prototype.mock = function (runtime_id, mock) {
+            this.createTestContext();
+            this.getContext().register(runtime_id, mock, true);
+        };
+        Injector.prototype.clearMocks = function () {
+            this.clearTestContext();
+        };
         Injector.prototype.createTestContext = function () {
+            if (this.is_test_context) {
+                return;
+            }
             this.old_context = this.context;
             this.context = this.context.clone();
+            this.is_test_context = true;
         };
         Injector.prototype.clearTestContext = function () {
             this.context = this.old_context;
+            this.old_context = null;
+            this.is_test_context = false;
         };
         return Injector;
     })();
