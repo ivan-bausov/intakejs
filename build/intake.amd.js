@@ -1,5 +1,5 @@
-
 define('context',["require", "exports"], function (require, exports) {
+    "use strict";
     var Context = (function () {
         function Context() {
             this.map = {};
@@ -57,7 +57,7 @@ define('context',["require", "exports"], function (require, exports) {
             return ctx;
         };
         return Context;
-    })();
+    }());
     exports.__esModule = true;
     exports["default"] = Context;
     function isCreator(obj) {
@@ -66,6 +66,7 @@ define('context',["require", "exports"], function (require, exports) {
 });
 
 define('injector',["require", "exports", "./context"], function (require, exports, context_1) {
+    "use strict";
     var Injector = (function () {
         function Injector() {
             this.is_test_context = false;
@@ -116,8 +117,8 @@ define('injector',["require", "exports", "./context"], function (require, export
                         }
                         var injected_deps = [];
                         var i = 0;
-                        for (var _a = 0; _a < runtime_ids.length; _a++) {
-                            var id = runtime_ids[_a];
+                        for (var _a = 0, runtime_ids_1 = runtime_ids; _a < runtime_ids_1.length; _a++) {
+                            var id = runtime_ids_1[_a];
                             if (typeof args[i] === 'undefined') {
                                 injected_deps.push(self.getContext().resolve(id));
                             }
@@ -159,7 +160,7 @@ define('injector',["require", "exports", "./context"], function (require, export
             this.is_test_context = false;
         };
         return Injector;
-    })();
+    }());
     exports.__esModule = true;
     exports["default"] = Injector;
     function isString(s) {
@@ -168,6 +169,7 @@ define('injector',["require", "exports", "./context"], function (require, export
 });
 
 define('intake',["require", "exports", "./injector"], function (require, exports, injector_1) {
+    "use strict";
     var _injector = new injector_1["default"]();
     exports.Service = _injector.Service;
     exports.Injectable = _injector.Injectable;
@@ -176,3 +178,4 @@ define('intake',["require", "exports", "./injector"], function (require, exports
     exports.injector = _injector;
     exports.context = _injector.getContext();
 });
+

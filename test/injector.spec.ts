@@ -1,5 +1,3 @@
-/// <reference path="../lib//all.d.ts" />
-
 import Injector from "../lib/injector";
 
 describe('Injector', ()=>{

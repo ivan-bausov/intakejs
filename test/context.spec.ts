@@ -1,5 +1,3 @@
-/// <reference path="../lib//all.d.ts" />
-
 import Context from "../lib/context";
 
 describe('Context', ()=>{

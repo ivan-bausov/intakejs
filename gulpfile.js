@@ -8,17 +8,12 @@ var gulp        = require('gulp'),
     bump        = require('gulp-bump'),
     tag_version = require('gulp-tag-version'),
     filter      = require('gulp-filter'),
-    mocha       = require('gulp-mocha'),
     del         = require('del'),
     runSequence = require('run-sequence'),
-    tsd         = require('gulp-tsd'),
-    nodemon     = require('gulp-nodemon'),
     shell       = require('gulp-shell'),
     jasmine     = require('gulp-jasmine'),
     istanbul    = require('gulp-istanbul'),
-    concat    = require('gulp-concat'),
-    uglify    = require('gulp-uglify'),
-    rjs = require("gulp-requirejs");
+    rjs         = require("gulp-requirejs");
 
 require('git-guppy')(gulp);
 
@@ -29,8 +24,8 @@ var PATHS = {
   typings: 'typings'
 };
 
-var tsProject = ts.createProject('tsconfig.json', { sortOutput: true });
-var tsProjectAmd = ts.createProject('tsconfig_amd.json', { sortOutput: true });
+var tsProject = ts.createProject('tsconfig.json');
+var tsProjectAmd = ts.createProject('tsconfig_amd.json');
 
 /**
   * Git Hooks
@@ -52,29 +47,13 @@ gulp.task('definitions', shell.task([
 /**
  * Dev tasks
  */
-gulp.task('tsd:install', function (callback) {
-  tsd({
-    command: 'reinstall',
-    config: './tsd.json'
-  }, callback);
-});
-gulp.task('tsd', ['tsd:install'], shell.task([
-  'tsd link'
-]));
-
-gulp.task('clean:tsd', function (cb) {
-  del([
-    PATHS.typings
-  ], cb);
-});
-
 gulp.task('scripts:dev', function() {
   var tsResult = gulp.src([
       PATHS.src + '/**/*.ts',
       PATHS.test + '/**/*.ts'
     ], { base: "./" })
       .pipe(sourcemaps.init())
-      .pipe(ts(tsProject));
+      .pipe(tsProject());
 
   return merge([
     tsResult.js
@@ -94,15 +73,11 @@ gulp.task('scripts:amd', function() {
   var tsResult = gulp.src([
       PATHS.src + '/**/*.ts'
     ])
-    .pipe(ts(tsProjectAmd));
+    .pipe(tsProjectAmd());
 
   return merge([
       tsResult.js
-        //.pipe(concat("intake.amd.min.js"))
-        //.pipe(uglify())
-        //.pipe(rjs({baseUrl: PATHS.build + '/intake.js'}))
         .pipe(gulp.dest(PATHS.build))
-      //.pipe(rjs({baseUrl: PATHS.build + '/intake.js'}))
     ]);
 
 });
@@ -115,11 +90,11 @@ gulp.task('scripts:dev:watch', ['scripts:dev'], function () {
   ], ['scripts:dev']);
 });
 
-gulp.task('clean:dev', function (cb) {
-  del([
+gulp.task('clean:dev', function () {
+  return del([
     PATHS.src + '/**/*.js',
     PATHS.test + '/**/*.js'
-  ], cb);
+  ]);
 });
 
 /**
@@ -155,7 +130,7 @@ gulp.task('scripts:prod', function() {
       PATHS.src + '/**/*.ts'
     ])
       .pipe(sourcemaps.init())
-      .pipe(ts(tsProject));
+      .pipe(tsProject());
 
   return merge([
     tsResult.dts.pipe(gulp.dest(PATHS.build)),
@@ -165,16 +140,16 @@ gulp.task('scripts:prod', function() {
   ]);
 });
 
-gulp.task('clean:prod', function (cb) {
-  del([
+gulp.task('clean:prod', function () {
+  return del([
     PATHS.build
-  ], cb);
+  ]);
 });
 
 /**
  * Cleaning
  */
-gulp.task('clean', ['clean:dev', 'clean:prod', 'clean:tsd']);
+gulp.task('clean', ['clean:dev', 'clean:prod']);
 
 /**
  * Default
@@ -195,7 +170,6 @@ gulp.task('default', function (cb) {
 gulp.task('ci', function (cb) {
   runSequence(
     'clean',
-    'tsd',
     'test',
     cb
   );

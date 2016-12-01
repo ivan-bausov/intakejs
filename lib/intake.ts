@@ -1,4 +1,3 @@
-/// <reference path="./all.d.ts" />
 import {IServiceConstructor, IConstructor, default as Injector}  from "./injector";
 
 var _injector = new Injector();

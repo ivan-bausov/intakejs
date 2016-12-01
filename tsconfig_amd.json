@@ -6,7 +6,8 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "declaration": true,
-    "outDir": "build"
+    "outDir": "build",
+    "noImplicitAny": true
   },
   "filesGlob": [
     "lib/**/*.ts",

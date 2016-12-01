@@ -1,4 +1,3 @@
-/// <reference path="../lib/all.d.ts" />
 import { IServiceConstructor, IConstructor, default as Injector } from "./injector";
 export { IServiceConstructor } from "./injector";
 export { IConstructor } from "./injector";
