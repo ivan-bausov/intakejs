@@ -44,7 +44,7 @@ export default class Injector {
         var original = target;
 
         // a utility function to generate instances of a class
-        function construct(constructor, args) {
+        function construct(constructor: Function, args: any) {
           var c : any = function () {
             return constructor.apply(this, args);
           };
@@ -53,9 +53,9 @@ export default class Injector {
         }
 
         // the new constructor behaviour
-        var f : any = function (...args) {
+        var f : any = function (...args: any[]) {
 
-          let injected_deps = [];
+          let injected_deps: any[] = [];
           let i = 0;
           for (let id of runtime_ids) {
             if (typeof args[i] === 'undefined') {
@@ -98,12 +98,12 @@ export default class Injector {
    * @returns {function(any, string)}
    * @constructor
      */
-  public Inject: (runtime_id: string)=>((target, key)=>void);
+  public Inject: (runtime_id: string)=>((target: any, key: string)=>void);
 
   /**
    * injects dependency with given runtime ids to the decorated class'es constructor
    */
-  public ConstructorInject: (...runtime_id: string[])=>(target)=>any;
+  public ConstructorInject: (...runtime_id: string[])=>(target: Function)=>any;
 
   public getContext(): IContext {
     return this.context;
@@ -141,6 +141,6 @@ export default class Injector {
 }
 
 
-function isString(s): s is string {
+function isString(s: any): s is string {
   return typeof s === 'string';
 }

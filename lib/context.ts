@@ -3,10 +3,10 @@ export interface InstanceCreator<T> {
 }
 
 export interface IContext {
-  register<T>(runtime_id: string, instance: T | InstanceCreator<T>, force?: boolean);
+  register<T>(runtime_id: string, instance: T | InstanceCreator<T>, force?: boolean): void;
   resolve<T>(runtime_id: string): T;
   clone(): IContext;
-  clear();
+  clear(): void;
 }
 
 export default class Context implements IContext {

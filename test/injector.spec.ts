@@ -71,7 +71,7 @@ describe('Injector', ()=>{
 
 
   describe('@ConstructorInject', ()=>{
-    let Productor1, Productor2, Consumer;
+    let Productor1: any, Productor2: any, Consumer: any;
 
     beforeEach(()=>{
       @injector.Injectable('Productor1')
@@ -140,7 +140,7 @@ describe('Injector', ()=>{
 
     injector.createTestContext();
 
-    injector.getContext().register('productor', { method: ()=>'test_foo'}, true);
+    injector.getContext().register<any>('productor', { method: ()=>'test_foo'}, true);
 
     expect(consumer.getFoo()).toBe('test_foo');
 

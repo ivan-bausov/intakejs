@@ -8,8 +8,8 @@ declare module 'intakejs' {
     export { IContext } from "intakejs/context";
     export const Service: (target: IServiceConstructor) => any;
     export const Injectable: (runtime_id: string) => (target: IConstructor) => any;
-    export const Inject: (runtime_id: string) => (target: any, key: any) => void;
-    export const ConstructorInject: (...runtime_id: string[]) => (target: any) => any;
+    export const Inject: (runtime_id: string) => (target: any, key: string) => void;
+    export const ConstructorInject: (...runtime_id: string[]) => (target: Function) => any;
     export const injector: Injector;
     export const context: IContext;
 }
@@ -43,11 +43,11 @@ declare module 'intakejs/injector' {
                 * @returns {function(any, string)}
                 * @constructor
                     */
-            Inject: (runtime_id: string) => ((target, key) => void);
+            Inject: (runtime_id: string) => ((target: any, key: string) => void);
             /**
                 * injects dependency with given runtime ids to the decorated class'es constructor
                 */
-            ConstructorInject: (...runtime_id: string[]) => (target) => any;
+            ConstructorInject: (...runtime_id: string[]) => (target: Function) => any;
             getContext(): IContext;
             mock(runtime_id: string, mock: any): void;
             clearMocks(): void;
@@ -61,10 +61,10 @@ declare module 'intakejs/context' {
             (): T;
     }
     export interface IContext {
-            register<T>(runtime_id: string, instance: T | InstanceCreator<T>, force?: boolean): any;
+            register<T>(runtime_id: string, instance: T | InstanceCreator<T>, force?: boolean): void;
             resolve<T>(runtime_id: string): T;
             clone(): IContext;
-            clear(): any;
+            clear(): void;
     }
     export default class Context implements IContext {
             /**

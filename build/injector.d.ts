@@ -26,11 +26,11 @@ export default class Injector {
      * @returns {function(any, string)}
      * @constructor
        */
-    Inject: (runtime_id: string) => ((target, key) => void);
+    Inject: (runtime_id: string) => ((target: any, key: string) => void);
     /**
      * injects dependency with given runtime ids to the decorated class'es constructor
      */
-    ConstructorInject: (...runtime_id: string[]) => (target) => any;
+    ConstructorInject: (...runtime_id: string[]) => (target: Function) => any;
     getContext(): IContext;
     mock(runtime_id: string, mock: any): void;
     clearMocks(): void;
