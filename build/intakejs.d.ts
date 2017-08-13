@@ -7,9 +7,9 @@ declare module 'intakejs' {
     import { IContext } from "intakejs/context";
     export { IContext } from "intakejs/context";
     export const Service: (target: IServiceConstructor) => any;
-    export const Injectable: (runtime_id: string) => (target: IConstructor) => any;
-    export const Inject: (runtime_id: string) => (target: any, key: string) => void;
-    export const ConstructorInject: (...runtime_id: string[]) => (target: Function) => any;
+    export const Injectable: (runtime_id: string | number) => (target: IConstructor) => any;
+    export const Inject: (runtime_id: string | number) => (target: any, key: string) => void;
+    export const ConstructorInject: (...runtime_id: (string | number)[]) => (target: Function) => any;
     export const injector: Injector;
     export const context: IContext;
 }
@@ -17,7 +17,7 @@ declare module 'intakejs' {
 declare module 'intakejs/injector' {
     import { IContext } from "intakejs/context";
     export interface IServiceConstructor extends IConstructor {
-            service_name: string;
+            service_name: string | number;
     }
     export interface IConstructor {
             new (): any;
@@ -35,7 +35,7 @@ declare module 'intakejs/injector' {
                 * @param runtime_id
                 * @returns {function(any)}
                 */
-            Injectable: (runtime_id: string) => (target: IConstructor) => any;
+            Injectable: (runtime_id: string | number) => (target: IConstructor) => any;
             /**
                 * injects dependency with given runtime id to the decorated field on first get
                 *
@@ -43,13 +43,13 @@ declare module 'intakejs/injector' {
                 * @returns {function(any, string)}
                 * @constructor
                     */
-            Inject: (runtime_id: string) => ((target: any, key: string) => void);
+            Inject: (runtime_id: string | number) => ((target: any, key: string) => void);
             /**
                 * injects dependency with given runtime ids to the decorated class'es constructor
                 */
-            ConstructorInject: (...runtime_id: string[]) => (target: Function) => any;
+            ConstructorInject: (...runtime_id: (string | number)[]) => (target: Function) => any;
             getContext(): IContext;
-            mock(runtime_id: string, mock: any): void;
+            mock(runtime_id: string | number, mock: any): void;
             clearMocks(): void;
             createTestContext(): void;
             clearTestContext(): void;
@@ -60,9 +60,10 @@ declare module 'intakejs/context' {
     export interface InstanceCreator<T> {
             (): T;
     }
+    export type RuntimeId = string | number;
     export interface IContext {
-            register<T>(runtime_id: string, instance: T | InstanceCreator<T>, force?: boolean): void;
-            resolve<T>(runtime_id: string): T;
+            register<T>(runtime_id: RuntimeId, instance: T | InstanceCreator<T>, force?: boolean): void;
+            resolve<T>(runtime_id: RuntimeId): T;
             clone(): IContext;
             clear(): void;
     }
@@ -75,12 +76,12 @@ declare module 'intakejs/context' {
                 * @param instance
                 * @param force
                     */
-            register<T>(runtime_id: string, instance: T | InstanceCreator<T>, force?: boolean): void;
+            register<T>(runtime_id: RuntimeId, instance: T | InstanceCreator<T>, force?: boolean): void;
             /**
                 * Returns previously registered instance for given key. If instance was never created, throws error.
                 * @param runtime_id
                 */
-            resolve<T>(runtime_id: string): T;
+            resolve<T>(runtime_id: RuntimeId): T;
             /**
                 * Removes all previously registered instances from context
                 */

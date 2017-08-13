@@ -1,6 +1,6 @@
 import { IContext } from "./context";
 export interface IServiceConstructor extends IConstructor {
-    service_name: string;
+    service_name: string | number;
 }
 export interface IConstructor {
     new (): any;
@@ -18,7 +18,7 @@ export default class Injector {
      * @param runtime_id
      * @returns {function(any)}
      */
-    Injectable: (runtime_id: string) => (target: IConstructor) => any;
+    Injectable: (runtime_id: string | number) => (target: IConstructor) => any;
     /**
      * injects dependency with given runtime id to the decorated field on first get
      *
@@ -26,13 +26,13 @@ export default class Injector {
      * @returns {function(any, string)}
      * @constructor
        */
-    Inject: (runtime_id: string) => ((target: any, key: string) => void);
+    Inject: (runtime_id: string | number) => ((target: any, key: string) => void);
     /**
      * injects dependency with given runtime ids to the decorated class'es constructor
      */
-    ConstructorInject: (...runtime_id: string[]) => (target: Function) => any;
+    ConstructorInject: (...runtime_id: (string | number)[]) => (target: Function) => any;
     getContext(): IContext;
-    mock(runtime_id: string, mock: any): void;
+    mock(runtime_id: string | number, mock: any): void;
     clearMocks(): void;
     createTestContext(): void;
     clearTestContext(): void;

@@ -2,9 +2,11 @@ export interface InstanceCreator<T> {
   (): T;
 }
 
+export type RuntimeId = string | number;
+
 export interface IContext {
-  register<T>(runtime_id: string, instance: T | InstanceCreator<T>, force?: boolean): void;
-  resolve<T>(runtime_id: string): T;
+  register<T>(runtime_id:RuntimeId, instance:T | InstanceCreator<T>, force?:boolean):void;
+  resolve<T>(runtime_id:RuntimeId):T;
   clone(): IContext;
   clear(): void;
 }
@@ -18,7 +20,11 @@ export default class Context implements IContext {
    * @param instance
    * @param force
      */
-  register<T>(runtime_id: string, instance: T | InstanceCreator<T>, force: boolean = false) {
+  register<T>(runtime_id:RuntimeId, instance:T | InstanceCreator<T>, force:boolean = false) {
+      if (isNumber(runtime_id)) {
+        runtime_id = runtime_id.toString();
+    }
+
     if (this.map[runtime_id] && !force) {
       throw new Error(`Instance with id "${runtime_id}" is already registered`);
     }
@@ -32,7 +38,11 @@ export default class Context implements IContext {
    * Returns previously registered instance for given key. If instance was never created, throws error.
    * @param runtime_id
    */
-  resolve<T>(runtime_id: string): T {
+  resolve<T>(runtime_id:RuntimeId):T {
+    if (isNumber(runtime_id)) {
+        runtime_id = runtime_id.toString();
+    }
+
     var data = this.map[runtime_id];
     if (!data) {
       throw new Error(`Instance with id ${runtime_id} not found`);
@@ -77,4 +87,8 @@ function isCreator(obj: any) : obj is InstanceCreator<any> {
 interface RuntimeData<T> {
   instance: T;
   creator: InstanceCreator<T>;
+}
+
+function isNumber(s:any):s is string {
+    return typeof s === 'number';
 }

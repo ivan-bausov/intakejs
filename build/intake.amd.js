@@ -1,5 +1,6 @@
 define('context',["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var Context = (function () {
         function Context() {
             this.map = {};
@@ -14,6 +15,9 @@ define('context',["require", "exports"], function (require, exports) {
            */
         Context.prototype.register = function (runtime_id, instance, force) {
             if (force === void 0) { force = false; }
+            if (isNumber(runtime_id)) {
+                runtime_id = runtime_id.toString();
+            }
             if (this.map[runtime_id] && !force) {
                 throw new Error("Instance with id \"" + runtime_id + "\" is already registered");
             }
@@ -27,6 +31,9 @@ define('context',["require", "exports"], function (require, exports) {
          * @param runtime_id
          */
         Context.prototype.resolve = function (runtime_id) {
+            if (isNumber(runtime_id)) {
+                runtime_id = runtime_id.toString();
+            }
             var data = this.map[runtime_id];
             if (!data) {
                 throw new Error("Instance with id " + runtime_id + " not found");
@@ -58,15 +65,18 @@ define('context',["require", "exports"], function (require, exports) {
         };
         return Context;
     }());
-    exports.__esModule = true;
     exports["default"] = Context;
     function isCreator(obj) {
         return typeof obj === 'function';
+    }
+    function isNumber(s) {
+        return typeof s === 'number';
     }
 });
 
 define('injector',["require", "exports", "./context"], function (require, exports, context_1) {
     "use strict";
+    exports.__esModule = true;
     var Injector = (function () {
         function Injector() {
             this.is_test_context = false;
@@ -96,7 +106,7 @@ define('injector',["require", "exports", "./context"], function (require, export
             this.ConstructorInject = function () {
                 var runtime_ids = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
-                    runtime_ids[_i - 0] = arguments[_i];
+                    runtime_ids[_i] = arguments[_i];
                 }
                 return function (target) {
                     // save a reference to the original constructor
@@ -113,7 +123,7 @@ define('injector',["require", "exports", "./context"], function (require, export
                     var f = function () {
                         var args = [];
                         for (var _i = 0; _i < arguments.length; _i++) {
-                            args[_i - 0] = arguments[_i];
+                            args[_i] = arguments[_i];
                         }
                         var injected_deps = [];
                         var i = 0;
@@ -161,15 +171,12 @@ define('injector',["require", "exports", "./context"], function (require, export
         };
         return Injector;
     }());
-    exports.__esModule = true;
     exports["default"] = Injector;
-    function isString(s) {
-        return typeof s === 'string';
-    }
 });
 
 define('intake',["require", "exports", "./injector"], function (require, exports, injector_1) {
     "use strict";
+    exports.__esModule = true;
     var _injector = new injector_1["default"]();
     exports.Service = _injector.Service;
     exports.Injectable = _injector.Injectable;

@@ -2,7 +2,7 @@ import Context from "./context";
 import {IContext} from "./context";
 
 export interface IServiceConstructor extends IConstructor{
-  service_name: string;
+  service_name: string | number;
 }
 
 export interface IConstructor {
@@ -19,13 +19,13 @@ export default class Injector {
       return target;
     };
 
-    this.Injectable = (runtime_id: string) => {
+    this.Injectable = (runtime_id: string | number) => {
       return (target: IConstructor) => {
         self.getContext().register(runtime_id, ()=>new target());
       }
     };
 
-    this.Inject = (runtime_id: string) => {
+    this.Inject = (runtime_id: string | number) => {
       return (target: any, key: string) => {
         Object.defineProperty(target, key, {
           get: () => {
@@ -38,7 +38,7 @@ export default class Injector {
       }
     };
 
-    this.ConstructorInject = (...runtime_ids: string[]) => {
+    this.ConstructorInject = (...runtime_ids: (string | number)[]) => {
       return (target: Function)=>{
         // save a reference to the original constructor
         var original = target;
@@ -89,7 +89,7 @@ export default class Injector {
    * @param runtime_id
    * @returns {function(any)}
    */
-  public Injectable: (runtime_id: string) => (target: IConstructor)=>any;
+  public Injectable: (runtime_id: string | number) => (target: IConstructor)=>any;
 
   /**
    * injects dependency with given runtime id to the decorated field on first get
@@ -98,18 +98,18 @@ export default class Injector {
    * @returns {function(any, string)}
    * @constructor
      */
-  public Inject: (runtime_id: string)=>((target: any, key: string)=>void);
+  public Inject: (runtime_id: string | number)=>((target: any, key: string)=>void);
 
   /**
    * injects dependency with given runtime ids to the decorated class'es constructor
    */
-  public ConstructorInject: (...runtime_id: string[])=>(target: Function)=>any;
+  public ConstructorInject: (...runtime_id: (string | number) [])=>(target: Function)=>any;
 
   public getContext(): IContext {
     return this.context;
   }
 
-  public mock(runtime_id: string, mock: any) {
+  public mock(runtime_id: string | number, mock: any) {
     this.createTestContext();
     this.getContext().register(runtime_id, mock, true);
   }
@@ -138,9 +138,4 @@ export default class Injector {
   private context: IContext = new Context();
 
   private old_context: IContext;
-}
-
-
-function isString(s: any): s is string {
-  return typeof s === 'string';
 }
